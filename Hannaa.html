@@ -1,0 +1,241 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fall Payment Portal</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Orbitron', monospace;
+      background-color: #0f172a;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    .loader-wrapper {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #0f172a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 9999;
+    }
+    .loader {
+      border: 8px solid rgba(255, 255, 255, 0.1);
+      border-top: 8px solid #00ffff;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+      box-shadow: 0 0 10px #00ffff;
+    }
+    .loader-text {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      color: #00ffff;
+      text-shadow: 0 0 5px #00ffff;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .welcome-box {
+      display: none;
+      background-color: #1e293b;
+      border-radius: 20px;
+      padding: 40px 30px;
+      text-align: center;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+      margin-top: 50px;
+    }
+    .welcome-box h1, .welcome-box h2, .welcome-box p {
+      text-shadow: 0 0 3px #00faff, 0 0 5px #00faff;
+    }
+    .btn-enter {
+      background: linear-gradient(90deg, #06b6d4, #3b82f6);
+      border: none;
+      padding: 14px 24px;
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 0 10px #00faff;
+      margin-top: 20px;
+    }
+    .btn-enter:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 15px #00faff;
+    }
+    .payment-container {
+      display: none;
+      background-color: #101e3c;
+      border-radius: 16px;
+      padding: 30px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+      text-align: center;
+      margin-top: 50px;
+    }
+    .payment-container h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
+      color: #b2f5ff;
+      text-shadow: 0 0 5px #0ff;
+    }
+    p.subtext {
+      font-size: 14px;
+      color: #94a3b8;
+      margin-bottom: 20px;
+    }
+    .qr-section {
+      cursor: pointer;
+    }
+    .qr-section img {
+      width: 250px;
+      height: 250px;
+      border-radius: 8px;
+      border: 2px solid #0ff;
+      margin-bottom: 10px;
+    }
+    .label {
+      font-size: 14px;
+      margin-bottom: 20px;
+      color: #ccc;
+    }
+    .wallet-section {
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid #00ffff44;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    .wallet-section h3 {
+      font-size: 16px;
+      color: #ff80ff;
+      margin-bottom: 10px;
+    }
+    .wallet-section p {
+      font-size: 14px;
+      color: #7efeff;
+      margin: 6px 0;
+    }
+    .wallet-section p span {
+      color: #00ffff;
+    }
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    .btn-group button {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 14px;
+      color: white;
+      cursor: pointer;
+      background: linear-gradient(90deg, #00eaff, #a600ff);
+      box-shadow: 0 0 10px rgba(0,255,255,0.3);
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+    }
+    .modal img {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 10px;
+    }
+    .modal .close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 30px;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="loader-wrapper" id="loader">
+    <div class="loader"></div>
+    <div class="loader-text">Loading...</div>
+  </div>  <div class="welcome-box" id="welcome">
+    <h1>Hey, I'm Fall Official</h1>
+    <h2>Website Payment</h2>
+    <p>Selamat datang di website pembayaran Fall Official</p>
+    <button class="btn-enter" id="goBtn">Go Payment</button>
+  </div>  <div class="payment-container" id="payment">
+    <h1>Payment Fall Official</h1>
+    <p class="subtext">Please select the payment you want. Scan data that has been prepared on the payment page. I developed this website to make any transaction easier. Happy transaction!!</p><div class="qr-section" onclick="openModal()">
+  <img src="https://files.catbox.moe/fxe1nb.png" alt="QR Code">
+  <div class="label">Payment Qris - klik untuk memperbesar</div>
+</div>
+
+<div class="wallet-section">
+  <h3>E-wallet</h3>
+  <p>DANA: <span>083869332563</span></p>
+  <p>GOPAY: <span>083869332563</span></p>
+  <p>OVO: <span>083869332563</span></p>
+</div>
+
+<div class="btn-group">
+  <button>Fall Official</button>
+  <button>Fall Hosting</button>
+  <button style="font-size: 17px; padding: 11px 29px;">BEDA KELAS NGAPAIN DI BAHAS😝</button>
+</div>
+
+  </div>  <div class="modal" id="qrModal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img src="https://files.catbox.moe/fxe1nb.png" alt="QR Code Full">
+  </div>  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      setTimeout(() => {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("welcome").style.display = "block";
+      }, 1500);
+
+      document.getElementById("goBtn").addEventListener("click", function () {
+        document.getElementById("welcome").style.display = "none";
+        document.getElementById("payment").style.display = "block";
+      });
+    });
+
+    function openModal() {
+      document.getElementById("qrModal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("qrModal").style.display = "none";
+    }
+  </script><footer style="margin-top: 40px; font-size: 14px; color: #888; text-align: center;">2025 Fall Hosting</footer>
+</body>
+  </html>
